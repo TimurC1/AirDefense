@@ -11,5 +11,5 @@ export default defineConfig({
       typescript: true,
     }),
   ],
-  base: "/boosty-fake/",
+  base: "/air-defense/",
 });

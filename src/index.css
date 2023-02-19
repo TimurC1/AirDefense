@@ -1,3 +1,5 @@
 body {
-    height: 100%;
+    padding: 40px;
+    height: 700px;
+    overflow: hidden;
 }

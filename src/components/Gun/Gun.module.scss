@@ -1,0 +1,25 @@
+.base {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  background: red;
+
+  width: 100px;
+  height: 20px;
+
+  z-index: 1;
+}
+
+.barrel {
+  position: absolute;
+  bottom: -60px;
+  left: 500px;
+
+  background: rgb(0,20,255);
+  background: linear-gradient(180deg, rgba(0,20,255,1) 0%, rgba(0,20,255,1) 40%, rgba(255,255,255,1) 40%);
+
+  width: 10px;
+  height: 120px;
+}
