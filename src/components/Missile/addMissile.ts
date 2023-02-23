@@ -1,11 +1,13 @@
 import { MissileProps } from "./Missile";
 import { degreesToRadians } from "../../utils";
 
-type AddMissileParams = {
+type AddMissileParams = BaseMissileParams & MissileProps;
+
+export type BaseMissileParams = {
   deg: number;
   count: number;
   startTime: number;
-} & MissileProps;
+};
 
 const DEFAULT_Y = 60;
 

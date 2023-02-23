@@ -7,6 +7,10 @@ export type MissileItemProps = {
   key: string;
   startTime: number;
   deg: number;
+  startLeft?: number;
+  startBottom?: number;
+  kkk?: number;
+  bbb?: number;
 };
 
 const MissileItem: FC<MissileItemProps & { isRocket?: boolean }> = ({

@@ -5,6 +5,8 @@ import Missile, { MissileItemProps, addMissile } from "../Missile";
 import { useStopWatch } from "../../hooks/useStopWatch";
 import { ballisticTrajectory } from "../Missile/ballisticTrajectory";
 import Target from "../Target";
+import { createRocket } from "../Missile/createRocket";
+import { rectilinearTrajectory } from "../Missile/rectilinearTrajectory";
 
 const KEYDOWN = "keydown";
 
@@ -13,6 +15,7 @@ type FieldParams = {
   rockets: MissileItemProps[];
   deg: number;
   count: number;
+  countRocket: number;
   modelTime: number;
 };
 
@@ -23,8 +26,6 @@ const Field = () => {
   const { time } = useStopWatch();
   const modelTime = msToSec(time);
   const launchTime = msToLaunch(time);
-  console.log("modelTime", modelTime);
-  console.log("launchTime", launchTime);
 
   const onChangeDed = (deg: number) =>
     setField((prevState) => ({
@@ -32,14 +33,26 @@ const Field = () => {
       rockets: prevState.rockets,
       deg,
       count: prevState.count,
+      countRocket: prevState.countRocket,
       modelTime: prevState.modelTime,
     }));
 
   const [field, setField] = useState<FieldParams>({
     missiles: [],
-    rockets: [],
+    rockets: [
+      {
+        left: 50,
+        startLeft: 50,
+        bottom: 610,
+        startBottom: 610,
+        startTime: modelTime,
+        deg: 0,
+        key: "0",
+      },
+    ],
     deg: 0,
     count: 0,
+    countRocket: 0,
     modelTime,
   });
 
@@ -48,6 +61,7 @@ const Field = () => {
       setField((prevState) => ({
         deg: prevState.deg,
         count: prevState.count + 1,
+        countRocket: prevState.countRocket,
         missiles: addMissile({
           deg: prevState.deg,
           count: prevState.count,
@@ -73,10 +87,19 @@ const Field = () => {
     [modelTime]
   );
 
-  useEffect(
-    () => setField((prevState) => ({ ...prevState, rockets: [] })),
-    [launchTime]
-  );
+  useEffect(() => {
+    setField((prevState) => ({
+      ...prevState,
+      countRocket: prevState.countRocket + 1,
+      // rockets: createRocket(prevState.rockets, {
+      //   count: prevState.countRocket,
+      //   startTime: prevState.modelTime,
+      //   deg: prevState.deg,
+      // }),
+      rockets: prevState.rockets,
+    }));
+    console.log("field.rockets", field.rockets);
+  }, [launchTime]);
 
   useEffect(() => {
     const newMissiles = field.missiles.map((missile) => {
@@ -93,7 +116,20 @@ const Field = () => {
       return { ...missile, ...newCoords };
     });
 
-    setField((prevState) => ({ ...prevState, missiles: newMissiles }));
+    const newRockets = field.rockets.map((rocket) => {
+      console.log("rocket", rocket);
+      const newCoords = rectilinearTrajectory({
+        time: modelTime - rocket.startTime,
+        rocket,
+      });
+      return { ...rocket, ...newCoords };
+    });
+
+    setField((prevState) => ({
+      ...prevState,
+      missiles: newMissiles,
+      rockets: newRockets,
+    }));
   }, [modelTime]);
 
   return (

@@ -19,8 +19,6 @@ export const ballisticTrajectory = ({
   left,
   bottom,
 }: BallisticTrajectoryParams): BaseBallisticTrajectoryParams => {
-  console.log("time", time);
-
   const x = VELOCITY * time * Math.cos(degreesToRadians(90 - deg));
   const y =
     VELOCITY * time * Math.sin(degreesToRadians(90 - deg)) -
